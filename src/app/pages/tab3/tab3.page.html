@@ -1,17 +1,23 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 3
-    </ion-title>
+<ion-header no-border>
+  <ion-toolbar >
+    
+    <ion-title> Favorites </ion-title>
+
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content >
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+  <div 
+    class="NoFavoriteText"
+    *ngIf="localDataService.articles.length === 0">
+    No hay favoritos prro
+  </div>
+
+
+  <app-articles 
+    [articles]="localDataService.articles"
+    [onFavorite]="true">
+  </app-articles>
+
 </ion-content>

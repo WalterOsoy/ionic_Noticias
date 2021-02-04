@@ -1,27 +1,39 @@
-<ion-header class="ion-no-border" >
-  <ion-toolbar>
-    <ion-title>
-      Encabezados
-    </ion-title>
+<ion-header [translucent]="true">
+  <ion-toolbar >
+    <ion-title> Encabezados </ion-title>
   </ion-toolbar>
-  <ion-segment scrollable mode="md" color="primary" (ionChange)="cambioCategoria($event)">
+
+  <ion-segment
+    scrollable 
+    mode="md"
+    [value]="categories[0]"
+    color="primary" 
     
-    <ion-segment-button mode="md" 
-                        *ngFor="let categoria of categorias"
-                        [value]="categoria">
-      <ion-label text-capitalize>{{categoria}}</ion-label>
+    (ionChange)="segmentChanged($event)">
+
+    <ion-segment-button
+      [value]="category"
+      *ngFor="let category of categories"
+      mode="md">
+      <ion-label text-capitalize>{{  category  }}</ion-label>
     </ion-segment-button>
+
   </ion-segment>
 </ion-header>
 
 <ion-content >
-  <app-noticias [noticias]="noticias"></app-noticias>
 
-  <ion-infinite-scroll threshold="150px" 
-                      (ionInfinite)="loadData($event)">
-    <ion-infinite-scroll-content loadingSpinner="crescent" 
-                                loadingText="Cargando data...">
+  <app-articles [articles]="articles"></app-articles>
+
+  <ion-infinite-scroll 
+    threshold="15%" 
+    [disabled]="complete"
+    position="bottom" 
+    (ionInfinite)="infiniteScrollLoad( $event )">
+    <ion-infinite-scroll-content 
+      loadingSpinner="bubbles" 
+      loadingText="Getting more news...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
-  
+
 </ion-content>

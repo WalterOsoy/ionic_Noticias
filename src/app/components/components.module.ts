@@ -1,22 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ArticlesComponent } from './articles/articles.component';
+import { ArticleComponent } from './article/article.component';
 import { IonicModule } from '@ionic/angular';
-import { NoticiaComponent } from './noticia/noticia.component';
-import { NoticiasComponent } from './noticias/noticias.component';
- 
+
 
 
 @NgModule({
-  declarations: [
-    NoticiaComponent,
-    NoticiasComponent
-  ],
-  exports:[
-    NoticiasComponent
-  ],
-  imports: [
-    CommonModule,
-    IonicModule
-  ]
+  declarations: [ArticlesComponent, ArticleComponent],
+  exports: [ArticlesComponent],
+  imports: [ CommonModule, IonicModule ]
 })
 export class ComponentsModule { }

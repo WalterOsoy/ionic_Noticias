@@ -1,36 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-import { NoticiasService } from '../../services/noticias.service';
-import { RespuestaTopHeadlines, Article } from '../../interfaces/interfaces';
+import { NoticesService } from '../../services/notices.service';
+import { Article } from '../../interfaces/index';
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
-export class Tab1Page implements OnInit {
+export class Tab1Page implements OnInit{
 
-  noticias: Article[] = [];
+  constructor(private noticesService: NoticesService) {}
+  ngOnInit() {
+    this.noticesService.getTopHeadlines(this.pageNum)
+      .then( res => this.articles.push(...res.articles) )
+    
+  }
 
-  constructor(private NoticiasService: NoticiasService) {}
+  articles: Article[] = [];
+  pageNum = 1;
+  complete = false;
 
-  ngOnInit(){
-    this.cargarNoticias();
+  loadData = (ev:any) => {
+    this.pageNum ++;
+
+    this.noticesService.getTopHeadlines(this.pageNum)
+      .then( res => {
+        this.articles.push(...res.articles)
+        if (this.articles.length === res.totalResults) this.complete = true;
+      })
+      .then( __ => ev.target.complete())
   }
-  loadData(event){
-    this.cargarNoticias(event);
-  }
-  cargarNoticias(event?){
-    this.NoticiasService.getTopHeadlines()
-    .subscribe(resp =>{
-      if(resp.articles.length === 0){
-        event.target.disable=true;
-        event.target.complete();
-        return;
-      }
-      this.noticias.push(...resp.articles);
-      if(event){
-        event.target.complete();
-      }
-    })
-  }
+
 }

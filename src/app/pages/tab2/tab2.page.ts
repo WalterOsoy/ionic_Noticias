@@ -1,7 +1,6 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
-import { IonSegment } from '@ionic/angular';
-import { NoticiasService } from '../../services/noticias.service';
-import { Article } from '../../interfaces/interfaces';
+import { Component, OnInit } from '@angular/core';
+import { NoticesService } from 'src/app/services/notices.service';
+import { Article } from '../../interfaces/index';
 
 @Component({
   selector: 'app-tab2',
@@ -9,35 +8,38 @@ import { Article } from '../../interfaces/interfaces';
   styleUrls: ['tab2.page.scss']
 })
 export class Tab2Page implements OnInit{
-
-  @ViewChild(IonSegment) segment: IonSegment;
-
-  categorias = ['business','entertainment','general','health','science','sport','technology'];
-  noticias: Article[]=[];
-
-  constructor(private noticiasService:NoticiasService){
-
+  constructor( private noticesService: NoticesService) { }
+  ngOnInit() {  
+    this.currentCategory = this.categories[0];
+    this.loadData(this.currentCategory)
   }
-  ngOnInit(){
-    this.cargarNoticias(this.categorias[0]);
+
+  categories = ['business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology']
+  articles: Article[] = [];
+
+  currentCategory:string;
+  curretnPage: number = 0;
+  complete: boolean = false;
+
+  loadData = async (category:string) => {
+    this.curretnPage++;
+
+    const res = await this.noticesService.getTopHeadlinesFiltered(category, this.curretnPage)
+    this.articles.push(...res.articles);
+    return this.articles.length === res.totalResults;
   }
-  cambioCategoria(event)
-  {
-    this.noticias=[];
-    this.cargarNoticias(event.detail.value);
+
+  segmentChanged = ({ detail }) => {
+    this.articles = [];
+    this.curretnPage = 0;
+    this.currentCategory = detail.value;
+    return this.loadData(this.currentCategory)
   }
-  cargarNoticias(categoria: string, event?){
 
 
-    this.noticiasService.getTopHeadlinesCategoria(categoria)
-      .subscribe(resp=>{
-        this.noticias.push(...resp.articles);
-        if(event){
-          event.target.complete();
-        }
-    });
+  infiniteScrollLoad = async (ev: any) => {
+    this.complete = await this.loadData(this.currentCategory);
+    ev.target.complete();
   }
-  loadData(event){
-    this.cargarNoticias(this.segment.value, event);
-  }
+  
 }

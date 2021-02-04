@@ -1,19 +1,20 @@
-<ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar>
-    <ion-title>
-      Walter News 
-    </ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar >
+    <ion-title> Para ti</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  
-  <app-noticias [noticias]="noticias"></app-noticias>
-  
-  <ion-infinite-scroll threshold="150px" 
-                      (ionInfinite)="loadData($event)">
-    <ion-infinite-scroll-content loadingSpinner="crescent" 
-                                loadingText="Cargando data...">
+<ion-content>
+  <app-articles [articles]="articles"></app-articles>
+
+  <ion-infinite-scroll 
+    threshold="15%" 
+    [disabled]="complete"
+    position="bottom" 
+    (ionInfinite)="loadData( $event )">
+    <ion-infinite-scroll-content 
+      loadingSpinner="bubbles" 
+      loadingText="Getting more news...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
